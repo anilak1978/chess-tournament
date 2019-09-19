@@ -8,7 +8,7 @@ output:
 ---
 
 
-```{r knitr_init, echo=FALSE, cache=FALSE}
+```{r knitr_init, echo=TRUE, cache=TRUE}
 library(knitr)
 library(rmdformats)
 
@@ -38,14 +38,14 @@ The first information would be : Gary Hua, ON, 6.0, 1794, 1605
 
 ## Data Collection in txt format
 
-```{r}
+```{r, echo=TRUE}
 install.packages('stringr', repos = "http://cran.us.r-project.org")
 library('stringr')
 ```
 
 
 
-```{r}
+```{r, echo=TRUE}
 # created a file variable and assign the txt url 
 # header is false
 #skipped first 4 rows as it is dont need them.
@@ -60,7 +60,7 @@ head(raw_data)
 
 
 
-```{r}
+```{r, echo=TRUE}
 #1 or more digit numbers, look for the ones that ends with white space and |
 
 player_id <- unlist(str_extract_all(unlist(raw_data), "\\d{1,}(?=\\s\\|)"))
@@ -71,7 +71,7 @@ player_id
 ## Find the Player Name
 
 
-```{r}
+```{r, echo=TRUE}
 # All letters, any word character and a space after that and match it two or more times. 
 
 player_name <- unlist(str_extract_all(unlist(raw_data), "([[:alpha:]]+\\s){2,}"))
@@ -82,7 +82,7 @@ player_name
 ## Find the Player State
 
 
-```{r}
+```{r, echo=TRUE}
 # all letters two of them together that ends with white space and |, ends with space and look for 
 
 player_state <- unlist(str_extract_all(unlist(raw_data), "([[:alpha:]]){2}\\s(?=\\|)"))
@@ -94,7 +94,7 @@ player_state
 ## Find Total Points
 
 
-```{r}
+```{r, echo=TRUE}
 # digit , period followed by digit. 
 
 total_points <- unlist(str_extract_all(unlist(raw_data), "\\d\\.\\d"))
@@ -105,7 +105,7 @@ total_points
 ## Find Player's Pre Rating
 
 
-```{r}
+```{r, echo=TRUE}
 #3 or 4 digit number that starts and ends with sspace
 
 players_pre_rating <- unlist(str_extract_all(unlist(raw_data), "[^->] \\d{3,4}(?=\\s)|[^->] \\d{3,4}[[:alpha:]][[:digit:]]|  \\d{3,4}[[:alpha:]][[:digit:]]"))
@@ -120,7 +120,7 @@ players_pre_rating
 
 
 
-```{r}
+```{r, echo=TRUE}
 # drop white spaces in all findings
 
 player_name <- str_trim(player_name, "both")
@@ -132,7 +132,7 @@ players_pre_rating <- str_trim(players_pre_rating, "both")
 
 # Create a dataframe
 
-```{r}
+```{r, echo=TRUE}
 
 df <- data.frame(player_id, player_name, player_state, total_points, players_pre_rating)
 head(df)
@@ -142,7 +142,7 @@ head(df)
 
 # Look at structure of the dataframe
 
-```{r}
+```{r, echo=TRUE}
 
 str(df)
 
@@ -152,7 +152,7 @@ We need to convert to numerical variables in order to find the Average Pre Chess
 
 ## Convert to numerical variables
 
-```{r}
+```{r, echo=TRUE}
 # convert o numerical variables
 df$player_id <- as.numeric(df$player_id)
 df$total_points <- as.numeric(df$total_points)
@@ -164,7 +164,7 @@ str(df)
 # Find Opponent of Each Player
 
 
-```{r}
+```{r, echo=TRUE}
 # one or more digit number that ends with |
 
 options(max.print = 2000)
@@ -177,7 +177,7 @@ opponent_player
 
 # Map each player's opponent to Pre Rating
 
-```{r}
+```{r, echo=TRUE}
 
 # total 7 rounds of games played
 
@@ -203,7 +203,7 @@ rounds
 
 # Calculate Average Pre Chess Rating of Opponent
 
-```{r}
+```{r, echo=TRUE}
 
 avg_opponent_player <- 0
 
@@ -216,7 +216,7 @@ for (i in 1:(length(player_id))){
 
 # Add the Average Pre Chess Rating of Opponent to the dataframe
 
-```{r}
+```{r, echo=TRUE}
 
 df$avg_opponent_player <- avg_opponent_player
 head(df)
@@ -228,7 +228,7 @@ head(df)
 ## Export the dataframe to .csv file
 
 
-```{r}
+```{r, echo=TRUE}
 
 write.csv(df, file = "chess_tournament.csv")
 
